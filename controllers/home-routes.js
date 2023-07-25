@@ -41,8 +41,7 @@ router.get("/profile/:id", async (req, res) => {
       res.status(404).json({ message: "No post with this id!" });
       return;
     }
-    const users = usersData.get({ plain: true });
-    res.render("profile", users);
+    res.render("profile", postData);
   } catch (err) {
     res.status(500).json(err);
   }
