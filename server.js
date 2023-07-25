@@ -11,7 +11,7 @@ const sequelize = require("./config/connection");
 //handlebar
 // set the views directory to "views"
 app.set("views", path.join(__dirname, "views"));
-const helpers = require("./utils/helpers");
+
 //create an express app instance
 const app = express();
 //initializes handlebars for HTML
