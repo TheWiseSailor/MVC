@@ -9,13 +9,15 @@ const routes = require("./controllers");
 //import sequelize for connection.js
 const sequelize = require("./config/connection");
 //handlebar
+// set the views directory to "views"
+app.set("views", path.join(__dirname, "views"));
 const helpers = require("./utils/helpers");
-//create anexpress app instance
+//create an express app instance
 const app = express();
-//initializes for html
+//initializes handlebars for HTML
 const hbs = exphbs.create({ helpers });
 //super super secret stuff lol
-const sesh = {
+const sess = {
   secret: "Secret Secret Super",
   cookie: {},
   resave: false,
@@ -29,7 +31,7 @@ app.use(session(sess));
 //You know what this does
 const PORT = process.env.PORT || 3001;
 
-//taken fromt he assignments in the bootcamp course just like connection.js
+//taken from the assignments in the bootcamp course just like connection.js
 // Inform Express.js which template engine we're using
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
@@ -41,5 +43,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
+  //start listening for incoming requests
   app.listen(PORT, () => console.log("Now listening"));
 });

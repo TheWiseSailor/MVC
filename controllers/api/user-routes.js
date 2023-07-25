@@ -1,8 +1,7 @@
 //require bla bla bla
 //Create new user/make login/logout
-
-const router = require("..");
-
+const router = require("express").Router();
+const { User } = require("../../models");
 router.post("/", async (req, res) => {
   try {
     //this logs the console request to the body and sees what data is being received
