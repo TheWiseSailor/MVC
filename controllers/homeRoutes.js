@@ -1,32 +1,32 @@
 const router = require("express").Router();
-const { User, Post } = require("../../models");
-const withAuth = require("../../utils/auth");
 
 router.get("/login", (req, res) => {
   if (req.session.logged_in) {
     res.redirect("/");
-  } else {
-    // Render the login page
-    res.render("login");
+    return;
   }
+  res.render("login", {
+    layout: "main",
+  });
 });
 
-router.get("/signup", (req, res) => {
-  // Render the signup page
-  res.render("signup");
+router.get("/signup", async (req, res) => {
+  res.render("signup", {
+    layout: "main",
+    logged_in: req.session.logged_in,
+  });
 });
 
 router.get("/profile", withAuth, async (req, res) => {
+  if (!req.session.logged_in) {
+    res.redirect("/login");
+    return;
+  }
   try {
-    const user = await User.findByPk(req.session.user_id, {
-      include: { model: Post, as: "posts" },
-    });
-    if (!user) {
-      res.redirect("/");
-      return;
-    }
+    const user = await User.findByPk(req.session.user_id, { include: "posts" });
     res.render("profile", {
       user: user.toJSON(),
+      logged_in: req.session.logged_in,
     });
   } catch (err) {
     res.status(500).json(err);
@@ -40,7 +40,9 @@ router.get("/profile/:id", async (req, res) => {
       res.status(404).json({ message: "No post with this id!" });
       return;
     }
-    res.render("profile", postData);
+    res.render("profile", postData, {
+      layout: "main",
+    });
   } catch (err) {
     res.status(500).json(err);
   }

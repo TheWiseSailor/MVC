@@ -32,7 +32,7 @@ router.post("/session", async (req, res) => {
   }
 });
 
-router.delete("/session", async (req, res) => {
+router.delete("/:id", withAuth, async (req, res) => {
   try {
     if (req.session.logged_in) {
       req.session.destroy(() => res.status(204).end());
