@@ -1,15 +1,11 @@
-//require bla bla bla
-//Create new user/make login/logout
 const router = require("express").Router();
 const { User } = require("../../models");
+
+//Create a new user
 router.post("/", async (req, res) => {
   try {
-    //this logs the console request to the body and sees what data is being received
-    console.log(req.body);
-    //create new user
     const userData = await User.create(req.body);
     req.session.save(() => {
-      //saves the session
       req.session.logged_in = true;
       req.session.user_id = userData.id;
       res.status(200).json(userData);
@@ -18,40 +14,57 @@ router.post("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-//login post
+
+// Login User
 router.post("/session", async (req, res) => {
   try {
-    //takes the mail and pass from the req body
-    const { email, password } = req.body;
-    //cehcks and sees if a user's email provided exists some where in the database
-    const user = await User.findOne({ where: { email } });
-    //this just saves the session data and responds with data
-    if (user && (await user.checkPassword(password))) {
-      req.session.save(() => {
-        req.session.logged_in = true;
-        req.session.user_id = user.id;
-        res.status(200).json(user);
-      });
+    // Find the user who matches the posted e-mail address
+    const userData = await User.findOne({
+      where: { displayName: req.body.display_name },
+    });
+
+    if (!userData) {
+      res
+        .status(400)
+        .json({ message: "Incorrect email or password, please try again" });
       return;
     }
-    res.status(401).send("Invalid login credentials!");
+
+    // Verify the posted password with the password store in the database
+    const validPassword = await userData.checkPassword(req.body.password);
+
+    if (!validPassword) {
+      res
+        .status(400)
+        .json({ message: "Incorrect email or password, please try again" });
+      return;
+    }
+
+    // Create session variables based on the logged in user
+    req.session.save(() => {
+      req.session.user_id = userData.id;
+      req.session.logged_in = true;
+
+      res.json({ user: userData, message: "You are now logged in!" });
+    });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+router.post("/logout", (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      // Remove the session variables
+      req.session.destroy(() => {
+        res.status(204).end();
+      });
+    } else {
+      res.status(404).end();
+    }
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-//logout
-//checks and sees if user is logged in and if so that means session is active
-router.delete("/session", async (req, res) => {
-  try {
-    if (req.session.logged_in) {
-      //destroys sesssion to log out and return success
-      req.session.destroy(() => res.status(204).end());
-    } else {
-      res.status(204).end();
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 module.exports = router;
