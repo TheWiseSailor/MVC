@@ -1,40 +1,47 @@
 const router = require("express").Router();
-const { Post, User } = require("../../models");
-const withAuth = require("../../utils/auth");
+const { User } = require("../../models");
 
-//this deleets the post
-router.delete;
-"/:id",
-  withAuth,
-  async (req, res) => {
-    try {
-      const postData = await Post.destroy({
-        title,
-        description,
-        userId: user.id,
-      });
-      res.status(200).json(postData);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  };
-//post feature
-router.post("/", withAuth, async (req, res) => {
-  const { title, description } = req.body;
+router.post("/", async (req, res) => {
   try {
-    const user = await User.findByPk(req.session.user_id);
-    if (!user) {
-      return res.sendStatus(401);
-    }
-    const newPost = await Post.create({
-      title,
-      description,
-      userId: user.id,
+    const userData = await User.create(req.body);
+    req.session.save(() => {
+      req.session.logged_in = true;
+      req.session.user_id = userData.id;
+      res.status(200).json(userData);
     });
-    res.status(200).json(newPost);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
-//
+
+router.post("/session", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (user && (await user.checkPassword(password))) {
+      req.session.save(() => {
+        req.session.logged_in = true;
+        req.session.user_id = user.id;
+        res.status(200).json(user);
+      });
+    } else {
+      res.status(401).send("Invalid login credentials!");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.delete("/session", async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      req.session.destroy(() => res.status(204).end());
+    } else {
+      res.status(204).end();
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = router;
