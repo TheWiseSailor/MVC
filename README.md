@@ -8,3 +8,4 @@ Sources
 - https://www.geeksforgeeks.org/
 - https://handlebarsjs.com/
 - https://devdocs.io/handlebars/
+- https://www.jsdelivr.com/
