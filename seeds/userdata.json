@@ -1,0 +1,22 @@
+[
+  {
+    "displayName": "Bob",
+    "email": "BobRoss@gmail.com"
+  },
+
+  {
+    "displayName": "Lernantino",
+    "email": "lernantino@gmail.com",
+    "password": "password12345"
+  },
+  {
+    "displayName": "Sal",
+    "email": "sal@hotmail.com",
+    "password": "password12345"
+  },
+  {
+    "displayName": "Blake",
+    "email": "the_blake@yahoo.com",
+    "password": "password12345"
+  }
+]
