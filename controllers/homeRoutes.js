@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Post } = require("../models");
+const { User, Comments, Post } = require("../models");
 const withAuth = require("../utils/auth");
 
 router.get("/profile", withAuth, async (req, res) => {
@@ -11,6 +11,7 @@ router.get("/profile", withAuth, async (req, res) => {
     const user = await User.findByPk(req.session.user_id, { include: "posts" });
     res.render("profile", {
       user: user.toJSON(),
+      // Pass the logged in flag to the template
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -19,6 +20,7 @@ router.get("/profile", withAuth, async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
+  // If a session exists, redirect the request to the homepage
   if (req.session.logged_in) {
     res.redirect("/");
     return;
@@ -39,8 +41,8 @@ router.get("/profile/:id", async (req, res) => {
       res.status(404).json({ message: "No post with this id!" });
       return;
     }
-    const post = postData.get({ plain: true });
-    res.render("profile", { post, logged_in: req.session.logged_in });
+    const users = usersData.get({ plain: true });
+    res.render("profile", users);
   } catch (err) {
     res.status(500).json(err);
   }
