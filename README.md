@@ -9,3 +9,4 @@ Sources
 - https://handlebarsjs.com/
 - https://devdocs.io/handlebars/
 - https://www.jsdelivr.com/
+- Tutor (Katherine Redford)

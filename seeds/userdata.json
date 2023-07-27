@@ -1,7 +1,8 @@
 [
   {
     "displayName": "Bob",
-    "email": "BobRoss@gmail.com"
+    "email": "bobross@gmail.com",
+    "password": "bob"
   },
 
   {
