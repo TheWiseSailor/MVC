@@ -25,20 +25,22 @@ const delButton = async (event) => {
   if (event.target.hasAttribute("data-id")) {
     const id = event.target.getAttribute("data-id");
 
-    const response = await fetch(`/api/posts/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "DELETE",
+      });
 
-    if (response.ok) {
-      document.location.replace("/profile");
-    } else {
+      if (response.ok) {
+        document.location.replace("/profile");
+      } else {
+        const errorMessage = await response.json();
+        alert(errorMessage.message || "Failed to delete post");
+      }
+    } catch (err) {
+      console.log("Error while deleting post:", err);
       alert("Failed to delete post");
     }
   }
 };
-
-document
-  .querySelector(".new-post-form")
-  .addEventListener("submit", newFormHandler);
 
 document.querySelector(".post-list").addEventListener("click", delButton);
