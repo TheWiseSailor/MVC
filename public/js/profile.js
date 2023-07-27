@@ -22,10 +22,6 @@ const newFormHandler = async (event) => {
 };
 
 const delButton = async (event) => {
-  const deleteBtn = document
-    .getElementById("#deleteBtn")
-    .hasAttribute("onclick");
-
   if (event.target.hasAttribute("data-id")) {
     const id = event.target.getAttribute("data-id");
 
@@ -44,3 +40,5 @@ const delButton = async (event) => {
 document
   .querySelector(".new-post-form")
   .addEventListener("submit", newFormHandler);
+
+document.querySelector(".post-list").addEventListener("click", delButton);
