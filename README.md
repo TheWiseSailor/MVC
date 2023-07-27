@@ -10,3 +10,6 @@ Sources
 - https://devdocs.io/handlebars/
 - https://www.jsdelivr.com/
 - Tutor (Katherine Redford)
+
+deployed app:
+https://techblogger69-127d9bdcae73.herokuapp.com/
