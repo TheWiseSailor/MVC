@@ -11,7 +11,6 @@ Welcome to the Tech Blog application! This is a web-based platform that allows u
 - [Usage](#usage)📲
 - [Contributing](#contributing)📜
 - [Sources](#sources)🔎
-- [Demo](#demo)🎞
 - [License](#license)💳
 - [Contact](#contact)📩
 - [Heroku](#heroku)
@@ -85,10 +84,6 @@ To install and run the , follow these steps: <br>
 ## Contact <a name="contact"></a>
 
 You may contact me by rudasilljay@gmail.com
-
-## Demo <a name="demo"></a>
-
-## Demo Drive
 
 ## Deployed Site <a name="deployed-site"></a>
 
