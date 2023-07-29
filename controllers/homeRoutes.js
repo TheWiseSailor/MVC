@@ -23,23 +23,41 @@ router.get("/", withAuth, async (req, res) => {
   }
 });
 
-router.get("/profile", withAuth, async (req, res) => {
-  if (!req.session.logged_in) {
-    res.redirect("/");
-    return;
-  }
+// router.get("/profile", withAuth, async (req, res) => {
+//   if (!req.session.logged_in) {
+//     res.redirect("/");
+//     return;
+//   }
+//   try {
+//     const user = await User.findByPk(req.session.user_id, { include: "posts" });
+//     res.render("profile", {
+//       user: user.toJSON(),
+//       // Pass the logged in flag to the template
+//       logged_in: req.session.logged_in,
+//     });
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+router.get("/profile", async (req, res) => {
   try {
-    const user = await User.findByPk(req.session.user_id, { include: "posts" });
+    const user = await User.findByPk(req.params.id, {
+      include: [{ model: Post, as: "posts" }],
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "No user with this id!" });
+      return;
+    }
+
     res.render("profile", {
       user: user.toJSON(),
-      // Pass the logged in flag to the template
       logged_in: req.session.logged_in,
     });
   } catch (err) {
     res.status(500).json(err);
   }
 });
-
 router.get("/login", (req, res) => {
   // If a session exists, redirect the request to the homepage
   if (req.session.logged_in) {
