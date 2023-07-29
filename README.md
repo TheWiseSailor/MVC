@@ -2,6 +2,11 @@
 
 ## Overview
 
+Parts of it was working now it doesnt and im trying to work on a project so i wont be working on this til after project 2
+<br>
+
+##
+
 Welcome to the Tech Blog application! This is a web-based platform that allows users to create, publish, and interact with blog posts on various technology-related topics.
 
 ## Table of Contents
